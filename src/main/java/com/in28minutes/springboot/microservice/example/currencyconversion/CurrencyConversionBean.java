@@ -8,14 +8,15 @@ public class CurrencyConversionBean {
   private BigDecimal conversionMultiple;
   private BigDecimal quantity;
   private BigDecimal totalCalculatedAmount;
+  private String ip;
   private int port;
 
   public CurrencyConversionBean() {
 
   }
 
-  public CurrencyConversionBean(Long id, String from, String to, BigDecimal conversionMultiple, BigDecimal quantity,
-      BigDecimal totalCalculatedAmount, int port) {
+  public CurrencyConversionBean( Long id, String from, String to, BigDecimal conversionMultiple, BigDecimal quantity,
+                                 BigDecimal totalCalculatedAmount, String ip, int port ) {
     super();
     this.id = id;
     this.from = from;
@@ -23,6 +24,7 @@ public class CurrencyConversionBean {
     this.conversionMultiple = conversionMultiple;
     this.quantity = quantity;
     this.totalCalculatedAmount = totalCalculatedAmount;
+    this.ip = ip;
     this.port = port;
   }
 
@@ -74,6 +76,16 @@ public class CurrencyConversionBean {
     this.totalCalculatedAmount = totalCalculatedAmount;
   }
 
+  public String getIp()
+  {
+    return ip;
+  }
+
+  public void setIp( final String ip )
+  {
+    this.ip = ip;
+  }
+
   public int getPort() {
     return port;
   }
@@ -82,4 +94,18 @@ public class CurrencyConversionBean {
     this.port = port;
   }
 
+  @Override
+  public String toString()
+  {
+    return "CurrencyConversionBean{"
+            + "id=" + id
+            + ", from='" + from + '\''
+            + ", to='" + to + '\''
+            + ", conversionMultiple=" + conversionMultiple
+            + ", quantity=" + quantity
+            + ", totalCalculatedAmount=" + totalCalculatedAmount
+            + ", ip='" + ip + '\''
+            + ", port=" + port
+            + '}';
+  }
 }
