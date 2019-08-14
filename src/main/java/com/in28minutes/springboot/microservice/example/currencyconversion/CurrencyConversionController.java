@@ -7,11 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import com.in28minutes.springboot.microservice.example.currencyconversion.exceptions.CCSServiceUnavailableException;
 
 @RestController
 public class CurrencyConversionController
@@ -46,10 +48,20 @@ public class CurrencyConversionController
 
     @GetMapping( "/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}" )
     public CurrencyConversionBean convertCurrencyFeign( @PathVariable String from, @PathVariable String to,
-                                                        @PathVariable BigDecimal quantity )
+                                                        @PathVariable BigDecimal quantity ) throws Exception
     {
 
-        CurrencyConversionBean response = proxy.retrieveExchangeValue( from, to );
+
+        CurrencyConversionBean response = null;
+        try
+        {
+            response = proxy.retrieveExchangeValue( from, to );
+        }
+        catch ( Exception e )
+        {
+            logger.error( "Can't reach Forex service..");
+            throw new CCSServiceUnavailableException( "Can't reach Forex service", HttpStatus.SERVICE_UNAVAILABLE);
+        }
 
         logger.info( "{}", response );
 
