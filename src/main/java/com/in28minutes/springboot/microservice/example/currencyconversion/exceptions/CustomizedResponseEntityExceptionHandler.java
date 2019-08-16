@@ -1,5 +1,7 @@
 package com.in28minutes.springboot.microservice.example.currencyconversion.exceptions;
 
+import java.util.stream.Collectors;
+import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +16,29 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 {
 
 
+  @ExceptionHandler( ConstraintViolationException.class )
+  @ResponseStatus( HttpStatus.BAD_REQUEST )
+  public final CCSException handleServiceUnavailableExceptions( ConstraintViolationException ex,
+                                                                WebRequest request )
+  {
+
+    CCSValidationError.CCSValidationErrorBuilder ccsValidationErrorBuilder=CCSValidationError.builder();
+
+    CCSException ccsException=new CCSException( CCSError.builder()
+            .validationErrors(
+                    ex.getConstraintViolations()
+                    .stream()
+                    .map( a -> ccsValidationErrorBuilder.element( a.getInvalidValue().toString()).error( a.getMessage() ).build() )
+                    .collect( Collectors.toList() ) )
+            .developerMessage( "Validation error." )
+            .userMessage( "Wrong input given.Retry with correct inputs." )
+            .internalMessage( "Validation error." )
+            .build(),HttpStatus.BAD_REQUEST);
+
+
+
+    return ccsException;
+  }
 
   @ExceptionHandler(CCSServiceUnavailableException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

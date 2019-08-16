@@ -1,9 +1,19 @@
 package com.in28minutes.springboot.microservice.example.currencyconversion.exceptions;
 
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 /**
  * @author sinhaab
  */
-public class CCSValidationError
+
+@Data
+@Builder
+@AllArgsConstructor
+public class CCSValidationError implements Serializable
 {
 
     private String element;

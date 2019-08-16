@@ -14,7 +14,7 @@ public class CCSException extends Exception {
 
 	private int status;
 
-	private List<CCSError> errors=new ArrayList<>(  );
+	private List<CCSError> errors=new ArrayList<>();
 
 	public CCSException( String message, Throwable cause, HttpStatus status )
 	{
@@ -44,6 +44,13 @@ public class CCSException extends Exception {
 				.internalMessage( cause.getMessage() )
 				.developerMessage( cause.getMessage() )
 				.build() );
+	}
+
+	public CCSException(  CCSError ccsError ,HttpStatus status )
+	{
+		super();
+		this.status = status.value();
+		this.errors.add(ccsError);
 	}
 
 	/**

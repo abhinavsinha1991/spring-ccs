@@ -3,18 +3,22 @@ package com.in28minutes.springboot.microservice.example.currencyconversion;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import com.in28minutes.springboot.microservice.example.currencyconversion.exceptions.CCSServiceUnavailableException;
 
+@Validated
 @RestController
 public class CurrencyConversionController
 {
@@ -47,8 +51,10 @@ public class CurrencyConversionController
     }
 
     @GetMapping( "/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}" )
-    public CurrencyConversionBean convertCurrencyFeign( @PathVariable String from, @PathVariable String to,
-                                                        @PathVariable BigDecimal quantity ) throws Exception
+    public CurrencyConversionBean convertCurrencyFeign(
+            @Pattern( regexp = "^[A-Z]{3}$", message = "Source currency code should be exactly 3 letters" ) @PathVariable String from,
+            @Pattern( regexp = "^[A-Z]{3}$", message = "Target currency code should be exactly 3 letters" ) @PathVariable String to,
+            @DecimalMax("9999999999.99") @PathVariable BigDecimal quantity ) throws Exception
     {
 
 
