@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import com.in28minutes.springboot.microservice.example.currencyconversion.exceptions.CCSDataNotFoundException;
 import com.in28minutes.springboot.microservice.example.currencyconversion.exceptions.CCSServiceUnavailableException;
 
-import javassist.NotFoundException;
+import feign.FeignException;
 
 @Validated
 @RestController
@@ -67,15 +67,22 @@ public class CurrencyConversionController
         {
             response = proxy.retrieveExchangeValue( from, to );
         }
-        catch ( NotFoundException nfex )
+        catch ( FeignException nfex )
         {
-            logger.error( nfex.getMessage() );
-            throw new CCSDataNotFoundException( "Data not found", nfex );
+            logger.error( "Service call to Forex failed: {}",nfex.getMessage() );
+            if ( nfex.status() == 404 )
+            {
+                throw new CCSDataNotFoundException( "Data not found", nfex );
+            }
+            else
+            {
+                throw new CCSServiceUnavailableException( "Can't reach Forex service" );
+            }
         }
         catch ( Exception e )
         {
-            logger.error( "Can't reach Forex service.." );
-            throw new CCSServiceUnavailableException( "Can't reach Forex service" );
+            logger.error( "Internal error encountered..{}",e.getMessage() );
+            throw new Exception( "Internal server error" );
         }
 
         logger.info( "{}", response );

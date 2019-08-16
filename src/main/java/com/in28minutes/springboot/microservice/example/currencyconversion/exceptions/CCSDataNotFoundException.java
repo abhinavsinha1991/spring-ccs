@@ -19,7 +19,7 @@ public class CCSDataNotFoundException extends Exception
         super( message, cause );
         this.errors.add( CCSError.builder()
                 .internalMessage( message )
-                .developerMessage( cause.getMessage() )
+                .developerMessage( message )
                 .userMessage( "Requested data not found" )
                 .build() );
     }

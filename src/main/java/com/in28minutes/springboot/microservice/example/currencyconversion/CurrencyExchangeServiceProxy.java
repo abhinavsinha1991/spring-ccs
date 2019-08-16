@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javassist.NotFoundException;
 
-@FeignClient( name = "forex-service", url = "${FOREX_SERVICE_ENDPOINT:http://spring-fs-myproject.10.34.156.26.nip.io}" )
+@FeignClient( name = "forex-service", url = "${FOREX_SERVICE_ENDPOINT:http://localhost:8000}" )
 /*@RibbonClient(name="forex-service")*/
 public interface CurrencyExchangeServiceProxy
 {

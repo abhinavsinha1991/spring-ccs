@@ -64,9 +64,10 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler( RuntimeException.class )
     @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
-    public final CCSUncheckedException handleAllRuntimeException( CCSUncheckedException ex, WebRequest request )
+    public final CCSUncheckedException handleAllRuntimeException( RuntimeException ex, WebRequest request )
     {
-        return ex;
+        CCSUncheckedException ccsUncheckedException= new CCSUncheckedException( ex.getCause(),HttpStatus.INTERNAL_SERVER_ERROR );
+        return ccsUncheckedException;
     }
 
 }

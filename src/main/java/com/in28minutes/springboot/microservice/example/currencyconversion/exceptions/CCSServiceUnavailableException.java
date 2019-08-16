@@ -10,7 +10,7 @@ public class CCSServiceUnavailableException extends Exception
 
     private static final long serialVersionUID = 7718828512143293558L;
 
-    private int status;
+    private int status=503;
 
     private List<CCSError> errors = new ArrayList<>();
 
