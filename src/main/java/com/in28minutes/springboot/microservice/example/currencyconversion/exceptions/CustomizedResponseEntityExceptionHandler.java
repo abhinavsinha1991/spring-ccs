@@ -16,8 +16,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 {
 
     @ExceptionHandler( CCSDataNotFoundException.class )
-    @ResponseStatus( HttpStatus.BAD_REQUEST )
-    public final CCSDataNotFoundException handleServiceUnavailableExceptions( CCSDataNotFoundException ex,
+    @ResponseStatus( HttpStatus.NOT_FOUND )
+    public final CCSDataNotFoundException handleDataNotFoundExceptions( CCSDataNotFoundException ex,
                                                                               WebRequest request )
     {
 
@@ -26,7 +26,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler( ConstraintViolationException.class )
     @ResponseStatus( HttpStatus.BAD_REQUEST )
-    public final CCSException handleServiceUnavailableExceptions( ConstraintViolationException ex,
+    public final CCSException handleValidationExceptions( ConstraintViolationException ex,
                                                                   WebRequest request )
     {
 
@@ -48,7 +48,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler( CCSServiceUnavailableException.class )
-    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    @ResponseStatus( HttpStatus.SERVICE_UNAVAILABLE )
     public final CCSServiceUnavailableException handleServiceUnavailableExceptions( CCSServiceUnavailableException ex,
                                                                                     WebRequest request )
     {
