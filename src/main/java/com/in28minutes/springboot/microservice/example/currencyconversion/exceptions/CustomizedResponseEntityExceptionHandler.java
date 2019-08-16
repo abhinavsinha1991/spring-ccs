@@ -15,47 +15,58 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler
 {
 
+    @ExceptionHandler( CCSDataNotFoundException.class )
+    @ResponseStatus( HttpStatus.BAD_REQUEST )
+    public final CCSDataNotFoundException handleServiceUnavailableExceptions( CCSDataNotFoundException ex,
+                                                                              WebRequest request )
+    {
 
-  @ExceptionHandler( ConstraintViolationException.class )
-  @ResponseStatus( HttpStatus.BAD_REQUEST )
-  public final CCSException handleServiceUnavailableExceptions( ConstraintViolationException ex,
-                                                                WebRequest request )
-  {
+        return ex;
+    }
 
-    CCSValidationError.CCSValidationErrorBuilder ccsValidationErrorBuilder=CCSValidationError.builder();
+    @ExceptionHandler( ConstraintViolationException.class )
+    @ResponseStatus( HttpStatus.BAD_REQUEST )
+    public final CCSException handleServiceUnavailableExceptions( ConstraintViolationException ex,
+                                                                  WebRequest request )
+    {
 
-    CCSException ccsException=new CCSException( CCSError.builder()
-            .validationErrors(
-                    ex.getConstraintViolations()
-                    .stream()
-                    .map( a -> ccsValidationErrorBuilder.element( a.getInvalidValue().toString()).error( a.getMessage() ).build() )
-                    .collect( Collectors.toList() ) )
-            .developerMessage( "Validation error." )
-            .userMessage( "Wrong input given.Retry with correct inputs." )
-            .internalMessage( "Validation error." )
-            .build(),HttpStatus.BAD_REQUEST);
+        CCSValidationError.CCSValidationErrorBuilder ccsValidationErrorBuilder = CCSValidationError.builder();
 
+        CCSException ccsException = new CCSException( CCSError.builder()
+                .validationErrors(
+                        ex.getConstraintViolations()
+                                .stream()
+                                .map( a -> ccsValidationErrorBuilder.element( a.getInvalidValue().toString() )
+                                        .error( a.getMessage() ).build() )
+                                .collect( Collectors.toList() ) )
+                .developerMessage( "Validation error." )
+                .userMessage( "Wrong input given.Retry with correct inputs." )
+                .internalMessage( "Validation error." )
+                .build(), HttpStatus.BAD_REQUEST );
 
+        return ccsException;
+    }
 
-    return ccsException;
-  }
+    @ExceptionHandler( CCSServiceUnavailableException.class )
+    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    public final CCSServiceUnavailableException handleServiceUnavailableExceptions( CCSServiceUnavailableException ex,
+                                                                                    WebRequest request )
+    {
+        return ex;
+    }
 
-  @ExceptionHandler(CCSServiceUnavailableException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public final CCSServiceUnavailableException handleServiceUnavailableExceptions(CCSServiceUnavailableException ex, WebRequest request) {
-    return ex;
-  }
+    @ExceptionHandler( Exception.class )
+    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    public final CCSException handleAllExceptions( Exception ex, WebRequest request )
+    {
+        return new CCSException( ex, HttpStatus.INTERNAL_SERVER_ERROR );
+    }
 
-  @ExceptionHandler(Exception.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public final CCSException handleAllExceptions(Exception ex, WebRequest request) {
-    return new CCSException( ex ,HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-
-  @ExceptionHandler(RuntimeException.class)
-  @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR)
-  public final CCSUncheckedException handleAllRuntimeException(CCSUncheckedException ex, WebRequest request) {
-    return ex;
-  }
+    @ExceptionHandler( RuntimeException.class )
+    @ResponseStatus( HttpStatus.INTERNAL_SERVER_ERROR )
+    public final CCSUncheckedException handleAllRuntimeException( CCSUncheckedException ex, WebRequest request )
+    {
+        return ex;
+    }
 
 }

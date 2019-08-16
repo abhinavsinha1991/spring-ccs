@@ -5,43 +5,43 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties( { "localizedMessage", "message", "suppressed", "stackTrace", "cause" } )
-public class CCSServiceUnavailableException extends Exception
+public class CCSDataNotFoundException extends Exception
 {
 
     private static final long serialVersionUID = 7718828512143293558L;
 
-    private int status;
+    private int status = 404;
 
     private List<CCSError> errors = new ArrayList<>();
 
-    public CCSServiceUnavailableException( String message, Throwable cause )
+    public CCSDataNotFoundException( String message, Throwable cause )
     {
         super( message, cause );
         this.errors.add( CCSError.builder()
                 .internalMessage( message )
                 .developerMessage( cause.getMessage() )
-                .userMessage( "Service unavailable" )
+                .userMessage( "Requested data not found" )
                 .build() );
     }
 
-    public CCSServiceUnavailableException( String message )
+    public CCSDataNotFoundException( String message )
     {
         super( message );
         this.errors.add( CCSError.builder()
                 .internalMessage( message )
                 .developerMessage( message )
-                .userMessage( "Service unavailable" )
+                .userMessage( "Requested data not found" )
                 .build() );
     }
 
-    public CCSServiceUnavailableException( Throwable cause )
+    public CCSDataNotFoundException( Throwable cause )
     {
         super( cause );
 
         this.errors.add( CCSError.builder()
                 .internalMessage( cause.getMessage() )
                 .developerMessage( cause.getMessage() )
-                .userMessage( "Service unavailable" )
+                .userMessage( "Requested data not found" )
                 .build() );
     }
 
