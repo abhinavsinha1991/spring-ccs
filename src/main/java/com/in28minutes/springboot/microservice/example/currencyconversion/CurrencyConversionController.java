@@ -72,7 +72,7 @@ public class CurrencyConversionController
             logger.error( "Service call to Forex failed: {}",nfex.getMessage() );
             if ( nfex.status() == 404 )
             {
-                throw new CCSDataNotFoundException( "Data not found", nfex );
+                throw new CCSDataNotFoundException( nfex.getCause().getMessage() );
             }
             else
             {
