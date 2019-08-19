@@ -1,6 +1,3 @@
-/*
- * Copyright 2019 Applied Card Technologies Ltd
- */
 package com.in28minutes.springboot.microservice.example.currencyconversion.exceptions;
 
 import java.io.Serializable;
@@ -11,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * @author sinhaab
+ * @author Abhinav Sinha
  */
 
 @Data
