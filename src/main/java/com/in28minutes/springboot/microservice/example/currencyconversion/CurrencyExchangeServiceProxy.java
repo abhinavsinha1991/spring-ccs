@@ -4,13 +4,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import javassist.NotFoundException;
-
 @FeignClient( name = "forex-service", url = "${FOREX_SERVICE_ENDPOINT:http://localhost:8000}" )
 /*@RibbonClient(name="forex-service")*/
 public interface CurrencyExchangeServiceProxy
 {
     @GetMapping( "/currency-exchange/from/{from}/to/{to}" )
     CurrencyConversionBean retrieveExchangeValue
-            ( @PathVariable( "from" ) String from, @PathVariable( "to" ) String to ) throws NotFoundException;
+            ( @PathVariable( "from" ) String from, @PathVariable( "to" ) String to );
 }

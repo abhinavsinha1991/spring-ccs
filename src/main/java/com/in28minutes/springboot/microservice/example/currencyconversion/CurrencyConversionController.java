@@ -69,10 +69,10 @@ public class CurrencyConversionController
         }
         catch ( FeignException nfex )
         {
-            logger.error( "Service call to Forex failed: {}",nfex.getMessage() );
+            logger.error( "Service call to Forex failed:", nfex );
             if ( nfex.status() == 404 )
             {
-                throw new CCSDataNotFoundException( nfex.getCause().getMessage() );
+                throw new CCSDataNotFoundException( nfex );
             }
             else
             {
@@ -81,7 +81,7 @@ public class CurrencyConversionController
         }
         catch ( Exception e )
         {
-            logger.error( "Internal error encountered..{}",e.getMessage() );
+            logger.error( "Internal error encountered..{}", e.getMessage() );
             throw new Exception( "Internal server error" );
         }
 
